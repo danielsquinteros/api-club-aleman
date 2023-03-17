@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  node-app:
+    build:
+       context: .
+       dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./:/usr/src/app/dev
+      - /usr/src/app/dev/node_modules
+      - /usr/src/app/dev/package-lock.json
+    environment:
+      HOST: ${HOST}
+      PORT: ${PORT}
+      MONGODB_CONNECT: ${MONGODB_CONNECT}
+      SECRETPRIVATEKEY: ${SECRETPRIVATEKEY}
+
