@@ -5,10 +5,10 @@ const { User } = require('../models');
 module.exports = {
   create: async (req, res) => {
     const {
-      name, email, password, role,
+      email, password, role,
     } = req.body;
     const user = new User({
-      name, email, password, role,
+      email, password, role,
     });
 
     // Encriptar la contraseña
@@ -25,7 +25,7 @@ module.exports = {
   },
   getAll: async (req, res) => {
     try {
-      const users = await User.find();
+      const users = await User.find({ status: true }, 'password');
       res.status(200).send(users);
     } catch (error) {
       res.status(409).send(error);

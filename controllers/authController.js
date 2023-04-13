@@ -3,7 +3,7 @@ const { generateJWT } = require('../helpers/generate-access-token');
 const { User } = require('../models');
 
 module.exports = {
-  login: async (req, res) => {
+  auth: async (req, res) => {
     const { email, password } = req.body;
     try {
     // Verification if email exist
@@ -23,13 +23,13 @@ module.exports = {
       const validPassword = bcryptjs.compareSync(password, user.password);
       if (!validPassword) {
         return res.status(400).send({
-          msg: 'The User / Password are not correct - password',
+          message: 'The User / Password are not correct - password',
         });
       }
       // Generate JWT
       const token = await generateJWT(user.id, user.role);
 
-      return res.status(200).send({ accessToken: token });
+      return res.status(200).send({ accessToken: token, user: { email: user.email } });
     } catch (error) {
       console.log(error);
       return res.status(404).send({

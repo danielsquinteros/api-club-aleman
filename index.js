@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const parser = require('body-parser');
+const { errors } = require('celebrate');
 
 const app = express();
 
@@ -25,9 +26,17 @@ app.use(parser.json({ limit: '5mb' }));
 app.use(parser.urlencoded({ limit: '5mb', extended: true, parameterLimit: 50000 }));
 // Routes
 app.use('/api/v1', require('./routes/user'));
+app.use('/api/v1', require('./routes/position'));
+app.use('/api/v1', require('./routes/contact'));
+app.use('/api/v1', require('./routes/auth'));
 
-app.get('/', (req, res) => {
-  res.send('Wecolme to TYPEBOLD');
+// Error Celebrate
+app.use(errors());
+
+app.use((err, req, res) => {
+  res.status(500).send({
+    message: err,
+  });
 });
 
 const dbConnection = require('./database/config');
